@@ -1,12 +1,17 @@
 
 from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import serializers, status
+
+from django.contrib.auth import get_user_model
 
 from .models import Product
 from .serializers import ProductSerializer
 
+import random
 
+User = get_user_model()
 class ProductViewSet(ViewSet):
     def list(self, request):
         products = Product.objects.all()
@@ -36,3 +41,14 @@ class ProductViewSet(ViewSet):
         product = Product.objects.get(id=pk)
         product.delete
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserApiView(APIView):
+    def get(self, _):
+        users = User.objects.all()
+        user = random.choice(users)
+        return Response({
+            "id": user.id,
+
+        })
+        
